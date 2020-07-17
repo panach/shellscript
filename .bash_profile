@@ -92,40 +92,6 @@ function ckm () {
   fi
 }
 
-
-function ckm2 () {
-  # git pull origin release
-  # git pull
-  # echo "git - pull 진행"
-  # branch_number=$(git branch --all | grep feature/SDUFM-$1)
-  branch_number=$(git branch --all | grep SDUFM-$1)
-  branch_array=()
-  # if [ -z "$2" ]; then
-  #   # echo '비어있음'
-  #   branch_type="feature"
-  # else
-  #   branch_type="hotfix"
-  # fi
-
-  $branch_array <<< $branch_number
-
-  echo $branch_number
-  echo $branch_array
-
-
-  # 조합 브런치 type + num
-  # if [ -n "$branch_number" ]; then
-    # echo "$branch_number 존재함 - checkout 진행"
-    # git checkout feature/SDUFM-$1
-    # echo $(git branch --all | grep feature/SDUFM-$1)
-
-  # else
-    # echo "$branch_number 없음 - branch 생성 및 checkout"
-    # git checkout -b feature/SDUFM-$1
-  # fi
-}
-
-
 function c_vo () {
   echo $1
   say -v Yuna $1
