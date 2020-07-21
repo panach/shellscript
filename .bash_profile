@@ -210,6 +210,16 @@ function j () {
   fi
 }
 
+# 아이피 클립보드 복사
+function ip () {
+  # 아이피
+  ipconfig getifaddr en0
+
+  #클립보드에 복사
+  ipconfig getifaddr en0 | pbcopy
+}
+
+
 alias desk='cd ~/Desktop'
 alias cl='clear'
 alias c='clear'
@@ -224,6 +234,7 @@ alias goco='~;cd Documents/git/fe/tmon_recruit/pc'
 alias gobe='~;cd Documents/git/service_tmon_benefit_ui/src/main/webapp/'
 alias ga='git add .'
 alias gp='git pull'
+alias com='git commit -m $1'
 alias gr='git checkout release;git pull'
 alias gs='git status'
 alias gss='git stash'
