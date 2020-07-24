@@ -219,6 +219,23 @@ function ip () {
   ipconfig getifaddr en0 | pbcopy
 }
 
+# 타임스템프 클립보드 복사
+function tm () {
+  timestamp_day=$(date '+%Y%m%d')"_"$(date '+%H%M')
+  echo "$timestamp_day" | pbcopy
+  echo "$timestamp_day"
+}
+
+# diff2html 커밋
+function dh () {
+  if [ -n "$1" ]; then
+    diff2html -s side -- -M HEAD~$1
+  else
+    diff2html -s side -- -M HEAD~1
+  fi
+}
+
+
 
 alias desk='cd ~/Desktop'
 alias cl='clear'
