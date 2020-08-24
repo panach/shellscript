@@ -156,6 +156,7 @@ function dl () {
   fi
     # time 변수에 지정한 일로 데일리 열기
     /usr/bin/open -a "/Applications/Google Chrome.app" "https://bitbucket.tmon.co.kr/bitbucket/projects/FRT/repos/daily/browse/UI%EA%B0%9C%EB%B0%9C%EC%9C%A0%EB%8B%9B%EA%B3%BC%EC%BD%94%EC%96%B4UI%EA%B0%9C%EB%B0%9C%EC%A7%80%EC%9B%90%EC%9C%A0%EB%8B%9B/$(TZ=KST+$time date +%Y%m)/$(TZ=KST+$time date +%Y%m%d).md?useDefaultHandler=true"
+    echo "김영득" | pbcopy
 }
 
 # bitbucket pr 열기
@@ -235,8 +236,29 @@ function dh () {
   fi
 }
 
+# 특정 브런치 삭제 후 바로 신규로 생성
+function branch_delete () {
+  git checkout release
+  git fetch origin
+  git pull
+  git branch -d $1
+  git push --delete origin $1
+  git branch $1
+  git push origin $1
+  git checkout $1
+}
 
+# 리모트의 브런치 pull, 로컬 브런치에 merge
+function gp2 () {
+  gp2_branch_name=$(git rev-parse --abbrev-ref HEAD)
+  git pull origin $gp2_branch_name
+}
 
+alias ..='cd ..'
+alias ...='cd ../..'
+alias .3='cd ../../..'
+alias .4='cd ../../../..'
+alias .5='cd ../../../../..'
 alias desk='cd ~/Desktop'
 alias cl='clear'
 alias c='clear'
@@ -249,8 +271,9 @@ alias gofe='~;cd Documents/git/fe/tmon'
 alias gofb='~;cd Documents/git/fe_build/panach'
 alias goco='~;cd Documents/git/fe/tmon_recruit/pc'
 alias gobe='~;cd Documents/git/service_tmon_benefit_ui/src/main/webapp/'
+alias godm='~;cd Documents/git/markup_dm'
 alias ga='git add .'
-alias gp='git pull'
+alias gp='git pull; git pull origin $(git pull origin git rev-parse --abbrev-ref HEAD)'
 alias com='git commit -m $1'
 alias gr='git checkout release;git pull'
 alias gs='git status'
@@ -262,6 +285,7 @@ alias ps='git push origin $(git rev-parse --abbrev-ref HEAD)'
 alias lsof='lsof -i :3000'
 alias kill='kill -9 $(lsof -ti:3000 -sTCP:LISTEN)'
 alias po='kill -9 $(lsof -ti:3000 -sTCP:LISTEN);git pull;npm start'
+# png 60-80 파일명.png
 alias png='pngquant --ext _new.png --speed 1 --quality'
 alias re='reload'
 alias cat_bash='cat ~/.bash_profile'
