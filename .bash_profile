@@ -101,6 +101,7 @@ function c_vo () {
 # 버전 업 하고 싶다 - 지금 있는 경로가 git 에 속해 있으면 브런치 명에서 숫자를 가져와서 경로에 넣고
 #  git 이 아닌곳이면 숫자를 입력 받도록 한다
 function fe_copy () {
+
   # 브런치명이거나 입력 받거나
   test_name=$(git rev-parse --abbrev-ref HEAD | cut -c 15-)
 
@@ -113,6 +114,7 @@ function fe_copy () {
     echo -e "입력하신 번호는 $test_name -> 확인 및 복사 진행합니다."
   fi
 
+  git -C Documents/git/fe_build/panach pull
   mkdir -p -v /Users/panach/Documents/git/fe_build/panach/$test_name/
 
   if [ -d /Users/panach/Documents/git/fe/tmon/dist/m ];then
@@ -126,8 +128,69 @@ function fe_copy () {
   /usr/bin/open -a "/Applications/Google Chrome.app" "http://sun.tmonc.net/view/994.FE/job/FE_BUILD/ws/panach/"
 }
 
-# 데일리 오픈
+
+# daily 저장소 pull / 이름 기준으로 영역을 echo / 클립보드에 복사
+# 사용하실때 내이름, 다음 이름,  local- git - daily 주소를 수정하고 사용할것
 function dl () {
+  # cd ~
+  myName="김영득" # 내이름
+  nextName="김주현" # daily 다음 사람 이름
+  dailyDirectory="/Users/panach/Documents/git/daily" # 데일리 git 절대경로
+
+  git -C $dailyDirectory pull
+  # 1초 딜레이
+  sleep 1
+
+  # 오늘 요일 받아오기
+  toDay=$(date '+%A')
+
+  # 비교할 요일 지정
+  tarDay="월요일"
+
+  # 오늘이 월요일이면 지난주 금요일, 그외 요일은 어제 일자를 받기 위한 변수
+  time=""
+
+  # 오늘 요일과 지정한 요일(월요일)을 비교
+  if [ "$toDay" == "$tarDay" ];then
+    # 오늘 = 월요일 이면 63 을 변수에 담음 이는 리눅스 일자 계산 함수로 15를 어제일로 계산 하루 추가시 24를 더해야함
+    # 3일을 뒤로 가려면 15 어제 + 1일 24 + 1일 24 = 63
+    time=63
+    echo "오늘과 지난주 금요일 데일리 열기."
+    else
+    # 그외 요일은 15로 어제로 돌리면 됨
+    time=15
+    echo "오늘과 어제 데일리 열기"
+  fi
+
+    # 위에서 검색 날짜의 파일에서 내 이름과 내 다음 사람의 이름을 검색
+    first_line=$(grep -n $myName "$dailyDirectory/UI개발유닛과코어UI개발지원유닛/$(TZ=KST+$time date +%Y%m)/$(TZ=KST+$time date +%Y%m%d).md" | cut -f1 -d:)
+    second_line=$(grep -n $nextName "$dailyDirectory/UI개발유닛과코어UI개발지원유닛/$(TZ=KST+$time date +%Y%m)/$(TZ=KST+$time date +%Y%m%d).md" | cut -f1 -d:)
+
+    n1=$(($first_line - 2)) ## 검색한 이름의 2줄 위의 라인수를 찾음 (본인)
+    n2=$(($second_line - 2)) ## 검색한 이름의 2줄 위의 라인수를 찾음 (다음 사람)
+
+    echo ""
+    echo "#############################"
+    echo "#"
+    echo "# 오늘 : $toDay"
+    echo "# 지난 : $(TZ=KST+$time date +%Y%m%d)"
+    echo "#"
+    echo "# 검색 결과 라인수 $n1 ~ $n2"
+    echo "#"
+    echo "#############################"
+    echo ""
+
+    # 검색된 라인수부터 출력 & pdcopy 클립보드에 복사
+    sed -n "$n1, $(($n2))p" "$dailyDirectory/UI개발유닛과코어UI개발지원유닛/$(TZ=KST+$time date +%Y%m)/$(TZ=KST+$time date +%Y%m%d).md"
+    sed -n "$n1, $(($n2))p" "$dailyDirectory/UI개발유닛과코어UI개발지원유닛/$(TZ=KST+$time date +%Y%m)/$(TZ=KST+$time date +%Y%m%d).md" | pbcopy
+
+  # 오늘 일자로 데일리 열기
+  /usr/bin/open -a "/Applications/Google Chrome.app" "https://bitbucket.tmon.co.kr/bitbucket/projects/FRT/repos/daily/browse/UI%EA%B0%9C%EB%B0%9C%EC%9C%A0%EB%8B%9B%EA%B3%BC%EC%BD%94%EC%96%B4UI%EA%B0%9C%EB%B0%9C%EC%A7%80%EC%9B%90%EC%9C%A0%EB%8B%9B/$(date '+%Y%m')/$(date '+%Y%m%d').md?useDefaultHandler=true"
+}
+
+
+# 데일리 오픈
+function dl2 () {
 
   # 오늘 일자로 데일리 열기
   /usr/bin/open -a "/Applications/Google Chrome.app" "https://bitbucket.tmon.co.kr/bitbucket/projects/FRT/repos/daily/browse/UI%EA%B0%9C%EB%B0%9C%EC%9C%A0%EB%8B%9B%EA%B3%BC%EC%BD%94%EC%96%B4UI%EA%B0%9C%EB%B0%9C%EC%A7%80%EC%9B%90%EC%9C%A0%EB%8B%9B/$(date '+%Y%m')/$(date '+%Y%m%d').md?useDefaultHandler=true"
@@ -159,6 +222,7 @@ function dl () {
     echo "김영득" | pbcopy
 }
 
+
 # bitbucket pr 열기
 function pr () {
     # 해당 명령어를 입력하는 폴더 경로를 받아 특정단어를 검색
@@ -176,10 +240,10 @@ function pr () {
 # allpr  또는 allpr "feature/SDUFM-00"
 function allpr () {
 
-  branch_list=("home" "atstore" "order" "checkout" "benefit" "paymentbenefit" "cs" "deallist" "mart" "deals_v3" "mall" "point" "tour" "search" "member" "interest" "plan" "schedule" "seller" "shared" "keyword" "tips" "auth" "delivery_my" "review" "category" "mediaprofile" "media" "delivery" "outlet" "store")
+  # branch_list=("home" "atstore" "order" "checkout" "benefit" "paymentbenefit" "cs" "deallist" "mart" "deals_v3" "mall" "point" "tour" "search" "member" "interest" "plan" "schedule" "seller" "shared" "keyword" "tips" "auth" "delivery_my" "review" "category" "mediaprofile" "media" "delivery" "outlet" "store")
 
   # footer_pr 목록
-  # branch_list=("home" "tips" "atstore" "benefit" "paymentbenefit" "check out" "order" "deallist" "mart" "mall" "seller" "plan" "point" "tour" "search" "member" "deals_v3" "keyword" "interest" "cs" "schedule" "shared")
+  branch_list=("home" "tips" "atstore" "benefit" "paymentbenefit" "check out" "order" "deallist" "mart" "mall" "seller" "plan" "point" "tour" "search" "member" "deals_v3" "keyword" "interest" "cs" "schedule" "shared")
   # 터미널 경로에 브런치명을 불러올것이 있다면 변수에 저장
   branch_name=$(git rev-parse --abbrev-ref HEAD)
 
@@ -228,7 +292,7 @@ function tm () {
 }
 
 # diff2html 커밋
-function dh () {
+function diff () {
   if [ -n "$1" ]; then
     diff2html -s side -- -M HEAD~$1
   else
@@ -248,10 +312,13 @@ function branch_delete () {
   git checkout $1
 }
 
-# 리모트의 브런치 pull, 로컬 브런치에 merge
-function gp2 () {
-  gp2_branch_name=$(git rev-parse --abbrev-ref HEAD)
-  git pull origin $gp2_branch_name
+
+# bash_profile git push
+function bash_git () {
+    git -C "/Users/panach/Documents/git/shellscript" pull
+    git -C "/Users/panach/Documents/git/shellscript" add .
+    git -C "/Users/panach/Documents/git/shellscript" commit -m $1
+    git -C "/Users/panach/Documents/git/shellscript" push origin master
 }
 
 
@@ -268,6 +335,8 @@ alias c='clear'
 alias op='open .'
 alias f='open -a Finder ./'
 alias ~='cd ~'
+
+## 경로 이동
 alias gog='~;cd Documents/git'
 alias godw='~;cd Downloads'
 alias gofe='~;cd Documents/git/fe/tmon'
@@ -275,12 +344,17 @@ alias gosun='~;cd Documents/git/fe_build/panach'
 alias goco='~;cd Documents/git/fe/tmon_recruit/pc'
 alias gobe='~;cd Documents/git/service_tmon_benefit_ui/src/main/webapp/'
 alias godm='~;cd Documents/git/markup_dm'
+alias godl='~;cd Documents/git/daily'
+
+
+## 파일 관련
 # png 60-80 파일명.png
 alias png='pngquant --ext _new.png --speed 1 --quality'
 
 
 ## 브라우저
 alias cat_bash='cat ~/.bash_profile'
+alias open_pro='code ~/.bash_profile'
 alias sun='/usr/bin/open -a "/Applications/Google Chrome.app" "http://sun.tmonc.net/view/994.FE/job/FE_BUILD/ws/panach/"'
 
 
@@ -298,3 +372,6 @@ alias ps='git push origin $(git rev-parse --abbrev-ref HEAD)'
 alias lsof='lsof -i :3000'
 alias kill='kill -9 $(lsof -ti:3000 -sTCP:LISTEN)'
 alias po='kill -9 $(lsof -ti:3000 -sTCP:LISTEN);git pull;npm start'
+
+## mac
+alias vo='sudo osascript -e "set Volume $1"'
