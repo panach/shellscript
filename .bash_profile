@@ -265,6 +265,8 @@ function allpr () {
 
 }
 
+# j - 최신 모든 지라 순으로 보기
+# j [NUM] - 해당 지라 번호로 문서 열기
 function j () {
   if [ -n "$1" ]; then
     echo "$1 지라 열기"
@@ -274,6 +276,20 @@ function j () {
     echo "최신 지라 열기"
   fi
 }
+# 지금 터미널 브런치 기준의 지라 열기
+# 좀더 심플한 방법이 없을까? 아니면 위 function j 와 합칠수 있는 사용법은?
+function jj () {
+    branchNumber=$(git rev-parse --abbrev-ref HEAD | cut -c 15-)
+    echo ${branchNumber}
+    if [ -z ${branchNumber} ]; then
+      echo "최신 지라 열기"
+      /usr/bin/open -a "/Applications/Google Chrome.app" "https://jira.tmon.co.kr/projects/SDUFM/?filter=allissues"
+    else
+      echo "$branchNumber 지라 열기"
+      /usr/bin/open -a "/Applications/Google Chrome.app" "https://jira.tmon.co.kr/projects/SDUFM/issues/SDUFM-${branchNumber}?filter=allissues"
+    fi
+}
+
 
 # 아이피 클립보드 복사
 function ip () {
@@ -336,6 +352,7 @@ alias op='open .'
 alias f='open -a Finder ./'
 alias ~='cd ~'
 
+
 ## 경로 이동
 alias gog='~;cd Documents/git'
 alias godw='~;cd Downloads'
@@ -354,7 +371,7 @@ alias png='pngquant --ext _new.png --speed 1 --quality'
 
 ## 브라우저
 alias cat_bash='cat ~/.bash_profile'
-alias open_pro='code ~/.bash_profile'
+alias vs_pro='code ~/.bash_profile'
 alias sun='/usr/bin/open -a "/Applications/Google Chrome.app" "http://sun.tmonc.net/view/994.FE/job/FE_BUILD/ws/panach/"'
 
 
