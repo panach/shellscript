@@ -1,3 +1,9 @@
+# zsh/bash 토글
+# exec bash
+#  위 사용 후 source ~/.bash_profile 해줘야 불러옴
+# exec zsh
+
+
 # Git branch in prompt.
 
 parse_git_branch() {
@@ -98,8 +104,6 @@ function c_vo () {
 }
 
 # cp_fb
-# 버전 업 하고 싶다 - 지금 있는 경로가 git 에 속해 있으면 브런치 명에서 숫자를 가져와서 경로에 넣고
-#  git 이 아닌곳이면 숫자를 입력 받도록 한다
 function fe_copy () {
 
   # 브런치명이거나 입력 받거나
@@ -126,6 +130,11 @@ function fe_copy () {
     cp -r /Users/panach/Documents/git/fe/tmon/dist/pc/ /Users/panach/Documents/git/fe_build/panach/$test_name/pc/
   fi
   /usr/bin/open -a "/Applications/Google Chrome.app" "http://sun.tmonc.net/view/994.FE/job/FE_BUILD/ws/panach/"
+}
+
+function dcp () {
+  echo "test" | grep -c cc
+  
 }
 
 
@@ -165,6 +174,8 @@ function dl () {
     # 위에서 검색 날짜의 파일에서 내 이름과 내 다음 사람의 이름을 검색
     first_line=$(grep -n $myName "$dailyDirectory/UI개발유닛과코어UI개발지원유닛/$(TZ=KST+$time date +%Y%m)/$(TZ=KST+$time date +%Y%m%d).md" | cut -f1 -d:)
     second_line=$(grep -n $nextName "$dailyDirectory/UI개발유닛과코어UI개발지원유닛/$(TZ=KST+$time date +%Y%m)/$(TZ=KST+$time date +%Y%m%d).md" | cut -f1 -d:)
+    # 오늘날짜의 문서에서 내이름의 라인수를 찾음. 오늘문서를 열때 라인을 정해서 열때 사용
+    third_line=$(grep -n $myName "$dailyDirectory/UI개발유닛과코어UI개발지원유닛/$(TZ=KST date +%Y%m)/$(TZ=KST date +%Y%m%d).md" | cut -f1 -d:)
 
     n1=$(($first_line - 2)) ## 검색한 이름의 2줄 위의 라인수를 찾음 (본인)
     n2=$(($second_line - 2)) ## 검색한 이름의 2줄 위의 라인수를 찾음 (다음 사람)
@@ -185,7 +196,8 @@ function dl () {
     sed -n "$n1, $(($n2))p" "$dailyDirectory/UI개발유닛과코어UI개발지원유닛/$(TZ=KST+$time date +%Y%m)/$(TZ=KST+$time date +%Y%m%d).md" | pbcopy
 
   # 오늘 일자로 데일리 열기
-  /usr/bin/open -a "/Applications/Google Chrome.app" "https://bitbucket.tmon.co.kr/bitbucket/projects/FRT/repos/daily/browse/UI%EA%B0%9C%EB%B0%9C%EC%9C%A0%EB%8B%9B%EA%B3%BC%EC%BD%94%EC%96%B4UI%EA%B0%9C%EB%B0%9C%EC%A7%80%EC%9B%90%EC%9C%A0%EB%8B%9B/$(date '+%Y%m')/$(date '+%Y%m%d').md?useDefaultHandler=true"
+  /usr/bin/open -a "/Applications/Google Chrome.app" "https://bitbucket.tmon.co.kr/bitbucket/projects/FRT/repos/daily/browse/UI%EA%B0%9C%EB%B0%9C%EC%9C%A0%EB%8B%9B%EA%B3%BC%EC%BD%94%EC%96%B4UI%EA%B0%9C%EB%B0%9C%EC%A7%80%EC%9B%90%EC%9C%A0%EB%8B%9B/$(date '+%Y%m')/$(date '+%Y%m%d').md?useDefaultHandler=true#$third_line"
+  code
 }
 
 
@@ -237,13 +249,13 @@ function pr () {
 
 
 # 전체서비스 PR 생성
-# allpr  또는 allpr "feature/SDUFM-00"
 function allpr () {
 
   # branch_list=("home" "atstore" "order" "checkout" "benefit" "paymentbenefit" "cs" "deallist" "mart" "deals_v3" "mall" "point" "tour" "search" "member" "interest" "plan" "schedule" "seller" "shared" "keyword" "tips" "auth" "delivery_my" "review" "category" "mediaprofile" "media" "delivery" "outlet" "store")
 
   # footer_pr 목록
-  branch_list=("home" "tips" "atstore" "benefit" "paymentbenefit" "check out" "order" "deallist" "mart" "mall" "seller" "plan" "point" "tour" "search" "member" "deals_v3" "keyword" "interest" "cs" "schedule" "shared")
+  branch_list=("home" "tips" "atstore" "benefit" "paymentbenefit" "checkout" "order" "deallist" "mart" "mall" "seller" "plan" "point" "tour" "search" "member" "deals_v3" "keyword" "interest" "cs" "schedule" "shared")
+
   # 터미널 경로에 브런치명을 불러올것이 있다면 변수에 저장
   branch_name=$(git rev-parse --abbrev-ref HEAD)
 
@@ -261,7 +273,7 @@ function allpr () {
       echo "${branch_list[$i]}-qa : "
   done
   # release 마지막에 추가
-  /usr/bin/open -a "/Applications/Google Chrome.app" "https://bitbucket.tmon.co.kr/bitbucket/projects/SDUUI/repos/fe/pull-requests?create&targetBranch=refs/heads/release&sourceBranch=refs/heads/$branch_name"
+  # /usr/bin/open -a "/Applications/Google Chrome.app" "https://bitbucket.tmon.co.kr/bitbucket/projects/SDUUI/repos/fe/pull-requests?create&targetBranch=refs/heads/release&sourceBranch=refs/heads/$branch_name"
 
 }
 
@@ -317,6 +329,7 @@ function diff () {
 }
 
 # 특정 브런치 삭제 후 바로 신규로 생성
+# branch_delte feature/SDUFM-00
 function branch_delete () {
   git checkout release
   git fetch origin
@@ -371,7 +384,7 @@ alias png='pngquant --ext _new.png --speed 1 --quality'
 
 ## 브라우저
 alias cat_bash='cat ~/.bash_profile'
-alias vs_pro='code ~/.bash_profile'
+alias vs_bash='code ~/.bash_profile'
 alias sun='/usr/bin/open -a "/Applications/Google Chrome.app" "http://sun.tmonc.net/view/994.FE/job/FE_BUILD/ws/panach/"'
 
 
@@ -384,6 +397,7 @@ alias gs='git status'
 alias gss='git stash'
 alias gssl='git stash list'
 alias ns='po;npm start'
+alias bb='kill -9 $(lsof -ti:3000 -sTCP:LISTEN);git pull;grunt bswatch'
 alias pm='git pull origin master;git push origin master'
 alias ps='git push origin $(git rev-parse --abbrev-ref HEAD)'
 alias lsof='lsof -i :3000'
