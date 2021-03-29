@@ -323,48 +323,6 @@ function pr () {
 
 } #pr 종료
 
-
-# 윈도우에서 ip를 git으로 저장
-function win_iptest () {
-  # ip 획득
-  text=$(ipconfig getifaddr en0)
-  # 오늘 시간
-  timestamp_day=$(date '+%Y%m%d')"_"$(date '+%H%M')
-  # 업로드할 git 경로
-  file_location="/Users/panach/Documents/git/markup_mis/panach/"
-  # pc_page 파일 초기화 후 오늘시간 + ip 를 남김
-  echo "$timestamp_day : $text" > $file_location'pc_page'
-  # 테스트 코드임 : 터미널에 pc_page 의 마지막 라인을 출력함
-  tail -n 1 $file_location'pc_page'
-
-  # git 으로 남김
-  # git -C "$(file_location)" pull
-  # git -C "$(file_location)" add .
-  # git -C "$(file_location)" commit -m "add : $timestamp_day"
-  # git -C "$(file_location)" push origin master
-
-  echo "업로드 완료"
-  # 본코드 작업에는 에러코드에 대한 방어가 없다 차후 스킬업하고 추가한다
-  # mac bash 에는 참고차 넣어만 두도록 하자. windows 에서만 사용하는 코드라고 보면된다
-  # 차후 추가.
-    # 계정 변경시 대응
-    # git 업로드시 에러 대응
-
- # Tnldlqjf. 이 코드는 일단 쓸수 없다. 회사에서 지급받은 pc 에서 ....리눅스 설치 불가다
-}
-
-# mac 에서 저장된 문서 가져옴
-function aaa () {
-  git -C "/Users/panach/Documents/git/markup_mis/panach/" pull
-  sleep 2
-  echo "git pull / 2초 딜레이 ========"
-  tail -n 1 $file_location'pc_page'
-}
-
-
-
-
-
 # 전체서비스 PR 생성
 function allpr () {
 
@@ -472,7 +430,7 @@ function branch_delete () {
 function bash_git () {
     git -C "/Users/panach/Documents/git/shellscript" pull
     git -C "/Users/panach/Documents/git/shellscript" add .
-    git -C "/Users/panach/Documents/git/shellscript" commit -m $1
+    git -C "/Users/panach/Documents/git/shellscript" commit -m "$1"
     git -C "/Users/panach/Documents/git/shellscript" push origin master
 }
 
