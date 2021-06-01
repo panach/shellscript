@@ -19,6 +19,11 @@ export PS1=" \u${debian_chroot:+($debian_chroot)}\[\033[01;34m\]\w\[\033[00m\]\[
 #export PS1="${debian_chroot:+($debian_chroot)}   \[\033[01;34m\]   \w\[\033[00m\]\[\033[32m\]\$(parse_git_branch)\[\033[00m\] $ "
 
 
+# 매이븐
+export M2_HOME=/Applications/apache-maven-3.6.3/
+export PATH=$PATH:$M2_HOME/bin
+
+
 #  color
 RED="\033[0;31m"
 GREEN="\033[0;32m"
@@ -329,7 +334,7 @@ function allpr () {
   # branch_list=("home" "atstore" "order" "checkout" "benefit" "paymentbenefit" "cs" "deallist" "mart" "deals_v3" "mall" "point" "tour" "search" "member" "interest" "plan" "schedule" "seller" "shared" "keyword" "tips" "auth" "delivery_my" "review" "category" "mediaprofile" "media" "delivery" "outlet" "store")
 
   # footer_pr 목록
-  branch_list=("home" "tips" "atstore" "benefit" "paymentbenefit" "checkout" "order" "deallist" "mart" "mall" "seller" "plan" "point" "tour" "tour_home" "search" "member" "deals_v3" "keyword" "interest" "cs" "schedule" "shared" "supermart")
+  branch_list=("home" "tips" "atstore" "benefit" "paymentbenefit" "checkout" "order" "deallist" "mart" "mall" "seller" "plan" "point" "tour" "tour_home" "search" "member" "deals_v3" "keyword" "interest" "cs" "schedule" "shared" "supermart" "auth" "delivery_my" "review" "category" "delivery" "outlet" "store" "mediaprofile")
 
   # 터미널 경로에 브런치명을 불러올것이 있다면 변수에 저장
   branch_name=$(git rev-parse --abbrev-ref HEAD)
@@ -401,6 +406,15 @@ function tm () {
   timestamp_day=$(date '+%Y%m%d')"_"$(date '+%H%M')
   echo "$timestamp_day" | pbcopy
   echo "$timestamp_day"
+}
+function dnd () {
+  #날짜
+  # dnd=$(date '+%Y%m%d')"_점심시간 "$(date '+%H')":"$(date '+%M')" ~ "$(date -v +1H '+%H')":"$(date -v +1H '+%M')
+  #날짜 없음
+  dnd2="점심시간 "$(date '+%H')":"$(date '+%M')" ~ "$(date -v +1H '+%H')":"$(date -v +1H '+%M')
+  # 클립보드 복사
+  echo "$dnd2" | pbcopy
+  echo "$dnd2"
 }
 
 # diff2html 커밋
