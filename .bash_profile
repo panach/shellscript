@@ -3,7 +3,11 @@
 #  위 사용 후 source ~/.bash_profile 해줘야 불러옴
 # exec zsh
 
-eval "$(rbenv init -)"
+# 맥 - 숨김 파일 보기 - 터미널에서
+# defaults write com.apple.finder AppleShowAllFiles YES && killall Finder
+
+
+# eval "$(rbenv init -)"
 
 # Git branch in prompt.
 
@@ -168,7 +172,7 @@ function dcp () {
 function dl () {
   # cd ~
   myName="김영득" # 내이름
-  nextName="김영술" # daily 다음 사람 이름
+  nextName="김윤희" # daily 다음 사람 이름
   dailyDirectory="/Users/panach/Documents/git/daily" # 데일리 git 절대경로
 
   git -C $dailyDirectory pull
@@ -183,6 +187,9 @@ function dl () {
 
   # 오늘이 월요일이면 지난주 금요일, 그외 요일은 어제 일자를 받기 위한 변수
   time=""
+
+echo "$toDay"
+
 
   # 오늘 요일과 지정한 요일(월요일)을 비교
   if [ "$toDay" == "$tarDay" ];then
@@ -202,8 +209,13 @@ function dl () {
     # 오늘날짜의 문서에서 내이름의 라인수를 찾음. 오늘문서를 열때 라인을 정해서 열때 사용
     third_line=$(grep -n $myName "$dailyDirectory/UI개발유닛과코어UI개발지원유닛/$(TZ=KST date +%Y%m)/$(TZ=KST date +%Y%m%d).md" | cut -f1 -d:)
 
-    n1=$(($first_line - 2)) ## 검색한 이름의 2줄 위의 라인수를 찾음 (본인)
-    n2=$(($second_line - 2)) ## 검색한 이름의 2줄 위의 라인수를 찾음 (다음 사람)
+
+  echo "버그픽스 중"
+  echo "$first_line"
+  echo "$second_line"
+
+    n1=$(($first_line)) ## 검색한 이름의 2줄 위의 라인수를 찾음 (본인)
+    n2=$(($second_line)) ## 검색한 이름의 2줄 위의 라인수를 찾음 (다음 사람)
 
     echo ""
     echo "#############################"
@@ -403,19 +415,20 @@ function ip () {
 
 # 타임스템프 클립보드 복사
 function tm () {
+  if [[ $1 = '1' ]];then
   timestamp_day=$(date '+%Y%m%d')"_"$(date '+%H%M')
+  else
+   timestamp_day=$(date '+%Y%m%d')
+  fi
   echo "$timestamp_day" | pbcopy
   echo "$timestamp_day"
 }
-function dnd () {
-  #날짜
-  # dnd=$(date '+%Y%m%d')"_점심시간 "$(date '+%H')":"$(date '+%M')" ~ "$(date -v +1H '+%H')":"$(date -v +1H '+%M')
-  #날짜 없음
-  dnd2="점심시간 "$(date '+%H')":"$(date '+%M')" ~ "$(date -v +1H '+%H')":"$(date -v +1H '+%M')
-  # 클립보드 복사
-  echo "$dnd2" | pbcopy
-  echo "$dnd2"
+
+function jt () {
+    myclip=$( pbpaste | grep -v "정렬 기준 우선순위정렬 기준으로 사용할 필드를 선택하십시오." | grep -v "이슈 생성" | grep -v "결과 새로 고침" | sed 's/\[마크업]//g' | sed 's/\Mark-up Task(마크업작업) //g' | sed 's/\[SUB]Mark-up Task(마크업상세작업) //g' | tr -d '\n' | sed 's/\SDUFM/\nSDUFM/g'| sed 's/\SDUMU/\nSDUMU/g' )
+  echo "$myclip" | pbcopy
 }
+
 
 # diff2html 커밋
 function diff () {
@@ -448,6 +461,25 @@ function bash_git () {
     git -C "/Users/panach/Documents/git/shellscript" push origin master
 }
 
+# 유틸 페이지 open
+function ut () {
+  if [[ $1 = 'a' ]];then
+    /usr/bin/open -a "/Applications/Google Chrome.app" "https://dololak.tistory.com/603"
+    /usr/bin/open -a "/Applications/Google Chrome.app" "https://keyframes.app/animate"
+    /usr/bin/open -a "/Applications/Google Chrome.app" "https://www.html-code-generator.com/css/"
+    /usr/bin/open -a "/Applications/Google Chrome.app" "https://flatuicolors.com/palette/defo"
+  elif [[ $1 = 'd' ]];then
+  /usr/bin/open -a "/Applications/Google Chrome.app" "https://tmoncorp.sharepoint.com/:w:/s/msteams_c4cbb6-50/EZN3s2AasUtKrBANHNsBz_sBabfrsyw2euTYyr1C5F20XQ?e=yWnYrd"
+  /usr/bin/open -a "/Applications/Google Chrome.app" "https://tmoncorp.sharepoint.com/:w:/s/msteams_d860eb/Efy1uOP7b2VOig7t2Rf37fYBKW_Bx1mBq8GkpfC24GLxbw?e=Eydmwb"
+   elif [[ $1 = 'b' ]];then
+   /usr/bin/open -a "/Applications/Google Chrome.app" "https://tmoncorp-my.sharepoint.com/:x:/g/personal/panach_tmon_co_kr/EezAnfSfhA1El_nXgV3PBXcBVyOL0omMY2G5OI3fnYHhHw?e=Wy4vNB"
+   /usr/bin/open -a "/Applications/Google Chrome.app" "https://tmoncorp.sharepoint.com/sites/msteams_cf4f50/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2Fmsteams%5Fcf4f50%2FShared%20Documents%2FGeneral%2F%EC%A3%BC%EA%B0%84%EB%B3%B4%EA%B3%A0%2F%EC%A3%BC%EA%B0%84%EB%B3%B4%EA%B3%A0%EB%A6%AC%EC%8A%A4%ED%8A%B8&p=true&ga=1"
+  else
+    /usr/bin/open -a "/Applications/Google Chrome.app" "https://10015.io/tools/css-gradient-generator"
+    /usr/bin/open -a "/Applications/Google Chrome.app" "https://www.html-code-generator.com/css/"
+    /usr/bin/open -a "/Applications/Google Chrome.app" "https://flatuicolors.com/palette/defo"
+  fi
+}
 
 ## 터미널
 alias re='reload'
@@ -477,7 +509,7 @@ alias godl='~;cd Documents/git/daily'
 alias gospc='~;cd Documents/git/fe_spc/tmon/pc'
 alias goold='~;cd Documents/git/fe_old/'
 alias gomis='~;cd Documents/git/markup_mis/panach'
-
+alias gome='~;cd Documents/git/service_tmon_media_ui/src/main/webapp/src'
 
 
 ## 파일 관련
@@ -514,3 +546,9 @@ alias po='kill -9 $(lsof -ti:3000 -sTCP:LISTEN);git pull;npm start'
 
 ## mac
 alias vo='sudo osascript -e "set Volume $1"'
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# nvm
+alias vv='node -v; npm -v'
