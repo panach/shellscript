@@ -49,10 +49,6 @@ function dl () {
 }
 
 
-
-
-
-
 function allpr () {
 
   branch_list=("home" "atstore" "order" "checkout" "benefit" "paymentbenefit" "cs" "deallist" "mart" "deals_v3" "mall" "point" "tour" "search" "member" "interest" "plan" "schedule" "seller" "shared" "keyword" "tips" "auth" "delivery_my" "review" "category" "mediaprofile" "media" "delivery" "outlet" "store")
@@ -80,6 +76,24 @@ function allpr () {
   # start C:/Users/panac/AppData/Local/Google/Chrome/Application/chrome.exe "https://bitbucket.tmon.co.kr/bitbucket/projects/SDUUI/repos/fe/pull-requests?create&targetBranch=refs/heads/release&sourceBranch=refs/heads/$branch_name"
 
 }
+# 타임스템프 클립보드 복사
+function tm () {
+  if [[ $1 = '1' ]];then
+  timestamp_day=$(date '+%Y%m%d')"_"$(date '+%H%M')
+  else
+   timestamp_day=$(date '+%Y%m%d')
+  fi
+  echo "$timestamp_day" | clip
+  echo "$timestamp_day"
+}
+
+function ut () {
+  start "C:/Users/panac/AppData/Local/Google/Chrome/Application/chrome.exe" "https://www.html-code-generator.com/css/"
+  start "C:/Users/panac/AppData/Local/Google/Chrome/Application/chrome.exe" "https://keyframes.app/animate"
+  start "C:/Users/panac/AppData/Local/Google/Chrome/Application/chrome.exe" "https://www.svgrepo.com/"
+  start "C:/Users/panac/AppData/Local/Google/Chrome/Application/chrome.exe" "https://flatuicolors.com/palette/defo"
+}
+
 
 # 터미널
 alias re='reload'
@@ -135,6 +149,10 @@ alias d2h="diff2html -s side -- -m HEAD~1"
 # npm / etc
 alias ns="npm start"
 alias vsbash="start 'C:/Users/panac/AppData/Local/Programs/Microsoft VS Code/Code.exe' 'C:/Users/panac/.bash_profile'"
+alias lo='start C:/Users/panac/AppData/Local/Google/Chrome/Application/chrome.exe "http://localhost:3000/"'
+alias color='start C:/Users/panac/AppData/Local/Google/Chrome/Application/chrome.exe "https://flatuicolors.com/palette/defo"'
+
+
 
 
 # 참조
