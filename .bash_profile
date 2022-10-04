@@ -24,8 +24,8 @@ export PS1=" \u${debian_chroot:+($debian_chroot)}\[\033[01;34m\]\w\[\033[00m\]\[
 
 
 # 매이븐
-export M2_HOME=/Applications/apache-maven-3.6.3/
-export PATH=$PATH:$M2_HOME/bin
+# export M2_HOME=/Applications/apache-maven-3.6.3/
+# export PATH=$PATH:$M2_HOME/bin
 
 
 #  color
@@ -115,16 +115,16 @@ function ckm () {
   # git pull origin release
   git pull
   echo "git - pull 진행"
-  branch_number=$(git branch --all | grep feature/SDUFM-$1)
+  branch_number=$(git branch --all | grep $1)
   branch_type="feature"
 
   # 조합 type + num
   if [ -n "$branch_number" ]; then
     echo "$branch_number 존재함 - checkout 진행"
-    git checkout feature/SDUFM-$1
+    git checkout $1
   else
     echo "$branch_number 없음 - branch 생성 및 checkout"
-    git checkout -b feature/SDUFM-$1
+    git checkout -b $1
   fi
 }
 
@@ -204,10 +204,10 @@ echo "$toDay"
   fi
 
     # 위에서 검색 날짜의 파일에서 내 이름과 내 다음 사람의 이름을 검색
-    first_line=$(grep -n $myName "$dailyDirectory/UI개발유닛과코어UI개발지원유닛/$(TZ=KST+$time date +%Y%m)/$(TZ=KST+$time date +%Y%m%d).md" | cut -f1 -d:)
-    second_line=$(grep -n $nextName "$dailyDirectory/UI개발유닛과코어UI개발지원유닛/$(TZ=KST+$time date +%Y%m)/$(TZ=KST+$time date +%Y%m%d).md" | cut -f1 -d:)
+    first_line=$(grep -n $myName "$dailyDirectory/마크업개발팀/$(TZ=KST+$time date +%Y%m)/$(TZ=KST+$time date +%Y%m%d).md" | cut -f1 -d:)
+    second_line=$(grep -n $nextName "$dailyDirectory/마크업개발팀/$(TZ=KST+$time date +%Y%m)/$(TZ=KST+$time date +%Y%m%d).md" | cut -f1 -d:)
     # 오늘날짜의 문서에서 내이름의 라인수를 찾음. 오늘문서를 열때 라인을 정해서 열때 사용
-    third_line=$(grep -n $myName "$dailyDirectory/UI개발유닛과코어UI개발지원유닛/$(TZ=KST date +%Y%m)/$(TZ=KST date +%Y%m%d).md" | cut -f1 -d:)
+    third_line=$(grep -n $myName "$dailyDirectory/마크업개발팀/$(TZ=KST date +%Y%m)/$(TZ=KST date +%Y%m%d).md" | cut -f1 -d:)
 
 
   echo "버그픽스 중"
@@ -229,11 +229,11 @@ echo "$toDay"
     echo ""
 
     # 검색된 라인수부터 출력 & pdcopy 클립보드에 복사
-    sed -n "$n1, $(($n2))p" "$dailyDirectory/UI개발유닛과코어UI개발지원유닛/$(TZ=KST+$time date +%Y%m)/$(TZ=KST+$time date +%Y%m%d).md"
-    sed -n "$n1, $(($n2))p" "$dailyDirectory/UI개발유닛과코어UI개발지원유닛/$(TZ=KST+$time date +%Y%m)/$(TZ=KST+$time date +%Y%m%d).md" | pbcopy
+    sed -n "$n1, $(($n2))p" "$dailyDirectory/마크업개발팀/$(TZ=KST+$time date +%Y%m)/$(TZ=KST+$time date +%Y%m%d).md"
+    sed -n "$n1, $(($n2))p" "$dailyDirectory/마크업개발팀/$(TZ=KST+$time date +%Y%m)/$(TZ=KST+$time date +%Y%m%d).md" | pbcopy
 
   # 오늘 일자로 데일리 열기
-  /usr/bin/open -a "/Applications/Google Chrome.app" "https://bitbucket.tmon.co.kr/bitbucket/projects/FRT/repos/daily/browse/UI%EA%B0%9C%EB%B0%9C%EC%9C%A0%EB%8B%9B%EA%B3%BC%EC%BD%94%EC%96%B4UI%EA%B0%9C%EB%B0%9C%EC%A7%80%EC%9B%90%EC%9C%A0%EB%8B%9B/$(date '+%Y%m')/$(date '+%Y%m%d').md?useDefaultHandler=true#$third_line"
+  /usr/bin/open -a "/Applications/Google Chrome.app" "https://bitbucket.tmon.co.kr/bitbucket/projects/FRT/repos/daily/browse/마크업개발팀/$(date '+%Y%m')/$(date '+%Y%m%d').md?useDefaultHandler=true#$third_line"
   code
 }
 
@@ -242,7 +242,7 @@ echo "$toDay"
 function dl2 () {
 
   # 오늘 일자로 데일리 열기
-  /usr/bin/open -a "/Applications/Google Chrome.app" "https://bitbucket.tmon.co.kr/bitbucket/projects/FRT/repos/daily/browse/UI%EA%B0%9C%EB%B0%9C%EC%9C%A0%EB%8B%9B%EA%B3%BC%EC%BD%94%EC%96%B4UI%EA%B0%9C%EB%B0%9C%EC%A7%80%EC%9B%90%EC%9C%A0%EB%8B%9B/$(date '+%Y%m')/$(date '+%Y%m%d').md?useDefaultHandler=true"
+  /usr/bin/open -a "/Applications/Google Chrome.app" "https://bitbucket.tmon.co.kr/bitbucket/projects/FRT/repos/daily/browse/마크업개발팀/$(date '+%Y%m')/$(date '+%Y%m%d').md?useDefaultHandler=true"
 
   # 월요일이면 확인하여 지난주 금요일 데일리 열기
 
@@ -267,7 +267,7 @@ function dl2 () {
     echo "오늘과 어제 데일리 열기"
   fi
     # time 변수에 지정한 일로 데일리 열기
-    /usr/bin/open -a "/Applications/Google Chrome.app" "https://bitbucket.tmon.co.kr/bitbucket/projects/FRT/repos/daily/browse/UI%EA%B0%9C%EB%B0%9C%EC%9C%A0%EB%8B%9B%EA%B3%BC%EC%BD%94%EC%96%B4UI%EA%B0%9C%EB%B0%9C%EC%A7%80%EC%9B%90%EC%9C%A0%EB%8B%9B/$(TZ=KST+$time date +%Y%m)/$(TZ=KST+$time date +%Y%m%d).md?useDefaultHandler=true"
+    /usr/bin/open -a "/Applications/Google Chrome.app" "https://bitbucket.tmon.co.kr/bitbucket/projects/FRT/repos/daily/browse/마크업개발팀/$(TZ=KST+$time date +%Y%m)/$(TZ=KST+$time date +%Y%m%d).md?useDefaultHandler=true"
     echo "김영득" | pbcopy
 }
 
@@ -402,7 +402,15 @@ function jj () {
       /usr/bin/open -a "/Applications/Google Chrome.app" "https://jira.tmon.co.kr/projects/SDUFM/issues/SDUFM-${branchNumber}?filter=allissues"
     fi
 }
-
+function r () {
+  if [ -n "$1" ]; then
+    echo "RNDINT-$1 지라 열기"
+    /usr/bin/open -a "/Applications/Google Chrome.app" "https://jira.tmon.co.kr/projects/RNDINT/issues/RNDINT-$1?filter=allissues"
+  else
+    /usr/bin/open -a "/Applications/Google Chrome.app" "https://jira.tmon.co.kr/projects/RNDINT/?filter=allissues"
+    echo "최신 지라 열기"
+  fi
+}
 
 # 아이피 클립보드 복사
 function ip () {
@@ -481,6 +489,65 @@ function ut () {
   fi
 }
 
+function doc_q () {
+    /usr/bin/open -a "/Applications/Google Chrome.app" "https://qoo10.sharepoint.com/sites/MarkupDevDiv/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FMarkupDevDiv%2FShared%20Documents%2FGeneral%2F%EC%A3%BC%EA%B0%84%EC%97%85%EB%AC%B4%EB%B3%B4%EA%B3%A0%EC%84%9C%2F2022&viewid=42838ecd%2D4f91%2D4449%2D96e9%2D372267f891ea"
+    /usr/bin/open -a "/Applications/Google Chrome.app" "https://qoo10.sharepoint.com/sites/MarkupDevDiv-1Team/Shared%20Documents/Forms/AllItems.aspx?RootFolder=%2Fsites%2FMarkupDevDiv%2D1Team%2FShared%20Documents%2F1%20Team%2F%EC%97%85%EB%AC%B4%EC%9D%BC%EC%A7%80"
+}
+
+
+# nvmrc 사용에 필요한 설정
+cdnvm() {
+    command cd "$@";
+    nvm_path=$(nvm_find_up .nvmrc | tr -d '\n')
+
+    # If there are no .nvmrc file, use the default nvm version
+    if [[ ! $nvm_path = *[^[:space:]]* ]]; then
+
+        declare default_version;
+        default_version=$(nvm version default);
+
+        # If there is no default version, set it to `node`
+        # This will use the latest version on your machine
+        if [[ $default_version == "N/A" ]]; then
+            nvm alias default node;
+            default_version=$(nvm version default);
+        fi
+
+        # If the current version is not the default version, set it to use the default version
+        if [[ $(nvm current) != "$default_version" ]]; then
+            nvm use default;
+        fi
+
+    elif [[ -s $nvm_path/.nvmrc && -r $nvm_path/.nvmrc ]]; then
+        declare nvm_version
+        nvm_version=$(<"$nvm_path"/.nvmrc)
+
+        declare locally_resolved_nvm_version
+        # `nvm ls` will check all locally-available versions
+        # If there are multiple matching versions, take the latest one
+        # Remove the `->` and `*` characters and spaces
+        # `locally_resolved_nvm_version` will be `N/A` if no local versions are found
+        locally_resolved_nvm_version=$(nvm ls --no-colors "$nvm_version" | tail -1 | tr -d '\->*' | tr -d '[:space:]')
+
+        # If it is not already installed, install it
+        # `nvm install` will implicitly use the newly-installed version
+        if [[ "$locally_resolved_nvm_version" == "N/A" ]]; then
+            nvm install "$nvm_version";
+        elif [[ $(nvm current) != "$locally_resolved_nvm_version" ]]; then
+            nvm use "$nvm_version";
+        fi
+    fi
+}
+alias cd='cdnvm'
+cd "$PWD"
+
+
+
+
+
+
+
+
 ## 터미널
 alias re='reload'
 alias ..='cd ..'
@@ -521,6 +588,12 @@ alias png='pngquant --ext _new.png --speed 1 --quality'
 alias cat_bash='cat ~/.bash_profile'
 alias vsbash='code ~/.bash_profile'
 alias sun='/usr/bin/open -a "/Applications/Google Chrome.app" "http://sun.tmonc.net/view/994.FE/job/FE_BUILD/ws/panach/"'
+alias bd='/usr/bin/open -a "/Applications/Google Chrome.app" "https://jira.tmon.co.kr/issues/?jql=project%20%3D%20BDEV%20AND%20status%20in%20(%EB%B0%B0%ED%8F%AC%EB%8C%80%EA%B8%B0%2C%20QA%2C%20Backlog%2C%20%22%EA%B0%9C%EB%B0%9C%20%EC%A7%84%ED%96%89%EC%A4%91%22%2C%20%22QA%20%EB%8C%80%EA%B8%B0%22)%20AND%20component%20%3D%20%ED%94%84%EB%A1%A0%ED%8A%B8-%EB%A7%88%ED%81%AC%EC%97%85%EA%B0%9C%EB%B0%9C%ED%8C%80"'
+alias b='/usr/bin/open -a "/Applications/Google Chrome.app" "https://jira.tmon.co.kr/issues/?jql=project%20%3D%20BDEV%20AND%20status%20in%20(%EB%B0%B0%ED%8F%AC%EB%8C%80%EA%B8%B0%2C%20QA%2C%20Backlog%2C%20%22%EA%B0%9C%EB%B0%9C%20%EC%A7%84%ED%96%89%EC%A4%91%22%2C%20%22QA%20%EB%8C%80%EA%B8%B0%22)%20AND%20component%20%3D%20%ED%94%84%EB%A1%A0%ED%8A%B8-%EB%A7%88%ED%81%AC%EC%97%85%EA%B0%9C%EB%B0%9C%ED%8C%80"'
+alias q='/usr/bin/open -a "/Applications/Google Chrome.app" "https://teams.microsoft.com/_?tenantId=76d856fd-7259-48fc-bf4e-e404ec69cf49#/conversations/1%20Team?threadId=19:77276794fa4846ed815561ff3f0a0b21@thread.tacv2&ctx=channel"'
+alias qm='/usr/bin/open -a "/Applications/Google Chrome.app" "https://mails.qoo10.com/owa/#path=/mail"'
+alias doc_qt='/usr/bin/open -a "/Applications/Google Chrome.app" "https://teams.microsoft.com/"'
+alias doc_tt='/usr/bin/open -a "/Applications/Google Chrome.app" "https://tmoncorp.sharepoint.com/:w:/s/msteams_d860eb/Efy1uOP7b2VOig7t2Rf37fYBKW_Bx1mBq8GkpfC24GLxbw?e=Eydmwb"'
 
 
 ## git
@@ -546,9 +619,17 @@ alias po='kill -9 $(lsof -ti:3000 -sTCP:LISTEN);git pull;npm start'
 
 ## mac
 alias vo='sudo osascript -e "set Volume $1"'
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # nvm
 alias vv='node -v; npm -v'
+# Setting PATH for Python 3.10
+# The original version is saved in .bash_profile.pysave
+PATH="/Library/Frameworks/Python.framework/Versions/3.10/bin:${PATH}"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+
+# homebrew
+echo 'eval "$(/opt/homebrew/bin/brew shellenv)"'
+eval "$(/opt/homebrew/bin/brew shellenv)"
