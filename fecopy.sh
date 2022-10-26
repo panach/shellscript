@@ -7,7 +7,7 @@ feDir=/Users/panach/Documents/git/fe/tmon/dist
 webFeBuildURL="http://sun.tmonc.net/view/994.FE/job/FE_BUILD/ws/panach/"
 
 timeStampDay=$(date '+%Y%m%d')"_"$(date '+%H%M')
-branchName=$(git -C "${feDir}" rev-parse --abbrev-ref HEAD);
+branchName=$(git -C "${feDir}" rev-parse --abbrev-ref HEAD) | sed -e 's/feature//' -e 's/hotfix//' -e 's/fix//' -e 's/\///';
 echo "$branchName"
 
 # fe_build 폴더가 있는지 체크
